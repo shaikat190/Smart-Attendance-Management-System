@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Management System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #ddd;
+        }
+
+        .present {
+            background-color: green;
+            color: white;
+        }
+
+        .absent {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Attendance Management System</h1>
+
+    <h2>Add Student</h2>
+
+    <input type="text" id="name" placeholder="Enter Student Name">
+
+    <input type="text" id="roll" placeholder="Enter Roll Number">
+
+    <button onclick="addStudent()">Add Student</button>
+
+    <h2>Student Attendance</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Percentage</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentTable">
+        </tbody>
+
+    </table>
+
+
+    <script>
+
+        function addStudent() {
+
+            let name = document.getElementById("name").value;
+            let roll = document.getElementById("roll").value;
+
+            if (name == "" || roll == "") {
+                alert("Please enter name and roll number");
+                return;
+            }
+
+            let table = document.getElementById("studentTable");
+
+            let row = table.insertRow();
+
+            row.insertCell(0).innerHTML = roll;
+            row.insertCell(1).innerHTML = name;
+            row.insertCell(2).innerHTML = "0";
+            row.insertCell(3).innerHTML = "0";
+            row.insertCell(4).innerHTML = "0%";
+
+            let actionCell = row.insertCell(5);
+
+            actionCell.innerHTML =
+                '<button class="present" onclick="markPresent(this)">Present</button>' +
+                '<button class="absent" onclick="markAbsent(this)">Absent</button>';
+
+            document.getElementById("name").value = "";
+            document.getElementById("roll").value = "";
+        }
+
+
+        function markPresent(button) {
+
+            let row = button.parentElement.parentElement;
+
+            let present = parseInt(row.cells[2].innerHTML);
+
+            present++;
+
+            row.cells[2].innerHTML = present;
+
+            calculatePercentage(row);
+        }
+
+
+        function markAbsent(button) {
+
+            let row = button.parentElement.parentElement;
+
+            let absent = parseInt(row.cells[3].innerHTML);
+
+            absent++;
+
+            row.cells[3].innerHTML = absent;
+
+            calculatePercentage(row);
+        }
+
+
+        function calculatePercentage(row) {
+
+            let present = parseInt(row.cells[2].innerHTML);
+
+            let absent = parseInt(row.cells[3].innerHTML);
+
+            let total = present + absent;
+
+            if (total > 0) {
+
+                let percentage = (present / total) * 100;
+
+                row.cells[4].innerHTML =
+                    percentage.toFixed(2) + "%";
+
+            } else {
+
+                row.cells[4].innerHTML = "0%";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
